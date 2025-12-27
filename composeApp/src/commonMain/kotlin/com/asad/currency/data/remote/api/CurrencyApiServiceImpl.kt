@@ -4,7 +4,7 @@ import com.asad.currency.domain.CurrencyApiService
 import com.asad.currency.domain.PreferencesRepository
 import com.asad.currency.domain.model.CurrencyApiResponse
 import com.asad.currency.domain.model.CurrencyCode
-import com.asad.currency.domain.model.CurrencyItemResponse
+import com.asad.currency.domain.model.Currency
 import com.asad.currency.domain.model.RequestState
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -42,7 +42,7 @@ class CurrencyApiServiceImpl(
         }
     }
 
-    override suspend fun getLatestExchangeRates(): RequestState<List<CurrencyItemResponse>> {
+    override suspend fun getLatestExchangeRates(): RequestState<List<Currency>> {
         return try {
             val response = httpClient.get(urlString = ENDPOINT)
             if (response.status.value == 200) {

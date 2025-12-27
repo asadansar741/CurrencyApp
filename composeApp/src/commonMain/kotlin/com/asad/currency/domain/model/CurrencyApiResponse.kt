@@ -8,5 +8,5 @@ data class CurrencyApiResponse(
     @SerialName("meta")
     val meta: MetaData,
     @SerialName("data")
-    val data: Map<String, CurrencyItemResponse>
+    val data: Map<String, Currency>
 )

@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-open class CurrencyItemResponse{
+open class Currency{
 //    @PrimaryKey
 //    var id: ObjectId = ObjectId()
 
