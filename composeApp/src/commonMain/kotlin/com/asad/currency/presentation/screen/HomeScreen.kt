@@ -1,15 +1,25 @@
 package com.asad.currency.presentation.screen
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.core.screen.Screen
-import com.asad.currency.data.remote.api.CurrencyApiServiceImpl
+import cafe.adriel.voyager.koin.getScreenModel
 
-class HomeScreen: Screen {
+class HomeScreen : Screen {
     @Composable
     override fun Content() {
-        LaunchedEffect(Unit){
-            CurrencyApiServiceImpl().getLatestExchangeRates()
+        val viewModel = getScreenModel<HomeViewModel>()
+        val rateStatus by viewModel.rateStatus
+        Column {
+            HomeHeader(
+                status = rateStatus,
+                onRateRefresh = {
+                    viewModel.sendEvent(
+                        event = HomeUiEvent.RefreshRates
+                    )
+                }
+            )
         }
     }
 }
