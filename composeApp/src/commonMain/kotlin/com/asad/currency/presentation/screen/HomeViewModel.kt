@@ -63,5 +63,4 @@ class HomeViewModel(
             HomeUiEvent.Switch -> {}
         }
     }
-
 }

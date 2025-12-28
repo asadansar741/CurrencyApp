@@ -1,0 +1,13 @@
+CREATE TABLE Currency(
+id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+code TEXT NOT NULL,
+value TEXT NOT NULL);
+
+upsert:
+INSERT OR REPLACE INTO Currency(id,code,value) VALUES(?,?,?);
+
+getAllCurrencies:
+SELECT * FROM Currency;
+
+delete:
+DELETE FROM Currency WHERE id=?;

@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
     alias(libs.plugins.kotlinxSerialization)
+    alias(libs.plugins.sql.delight)
 }
 
 kotlin {
@@ -35,6 +36,7 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.android)
+            implementation(libs.sql.delight.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -66,9 +68,13 @@ kotlin {
             implementation(libs.kotlin.coroutines)
             // Stately Common
             implementation(libs.stately.common)
+            //SqlDelight
+            implementation(libs.sql.delight.common)
+            implementation(libs.sql.delight.common.coroutines)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
+            implementation(libs.sql.delight.ios)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -76,6 +82,7 @@ kotlin {
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
+            implementation(libs.sql.delight.desktop)
         }
     }
 }
@@ -119,6 +126,14 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "com.asad.currency"
             packageVersion = "1.0.0"
+        }
+    }
+}
+
+sqldelight {
+    databases {
+        create("CurrencyDatabase") { // This name MUST match the class you are using
+            packageName.set("com.asad.currency.data.local.database")
         }
     }
 }
