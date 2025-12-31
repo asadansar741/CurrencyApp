@@ -16,7 +16,6 @@ class DatabaseRepositoryImpl(
 ) : DatabaseRepository {
     override suspend fun insertCurrencyData(currency: Currency) {
         database.currencySqlQueries.upsert(
-            id = 0.toLong(),
             code = currency.code,
             value_ = currency.value.toString()
         )
