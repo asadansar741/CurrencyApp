@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.asad.currency.domain.model.Currency
 import com.asad.currency.domain.model.CurrencyCode
+import com.asad.currency.domain.model.DisplayResult
 import com.asad.currency.domain.model.RateStatus
 import com.asad.currency.domain.model.RequestState
 import com.asad.currency.ui.theme.headerColor
@@ -58,11 +59,11 @@ fun HomeHeader(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp))
+            .clip(shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp))
             .background(headerColor)
             .padding(all = 24.dp)
     ) {
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(height = 24.dp))
         RatesStatus(
             status = status,
             onRateRefresh = onRateRefresh
@@ -73,7 +74,7 @@ fun HomeHeader(
             target = target,
             onSwitchClick = onSwitchClick
         )
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(height = 24.dp))
         AmountInput(
             amount = amount,
             onAmountChange = onAmountChange
@@ -140,29 +141,31 @@ fun RowScope.CurrencyView(
         Spacer(modifier = Modifier.height(height = 4.dp))
         Row(
             modifier = Modifier.fillMaxWidth()
-                .clip(RoundedCornerShape(size = 8.dp))
-                .height(54.dp)
+                .clip(shape = RoundedCornerShape(size = 8.dp))
+                .height(height = 54.dp)
                 .clickable { onClick() },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            if (currency.isSuccess()) {
-                Icon(
-                    modifier = Modifier.size(24.dp),
-                    painter = painterResource(
-                        resource = CurrencyCode.valueOf(currency.getSuccessData().code).flag
-                    ),
-                    tint = Color.Unspecified,
-                    contentDescription = "Currency Flag"
-                )
-                Spacer(modifier = Modifier.width(width = 8.dp))
-                Text(
-                    text = CurrencyCode.valueOf(value = currency.getSuccessData().code).name,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                    color = Color.White
-                )
-            }
+            currency.DisplayResult(
+                onSuccess = { data ->
+                    Icon(
+                        modifier = Modifier.size(size = 24.dp),
+                        painter = painterResource(
+                            resource = CurrencyCode.valueOf(value = data.code).flag
+                        ),
+                        tint = Color.Unspecified,
+                        contentDescription = "Country Flag"
+                    )
+                    Spacer(modifier = Modifier.width(width = 8.dp))
+                    Text(
+                        text = CurrencyCode.valueOf(value = data.code).name,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                        color = Color.White
+                    )
+                }
+            )
         }
     }
 }
@@ -173,7 +176,7 @@ fun CurrencyInputs(
     target: RequestState<Currency>,
     onSwitchClick: () -> Unit
 ) {
-    var animationStarted by remember { mutableStateOf(false) }
+    var animationStarted by remember { mutableStateOf(value = false) }
     val animatedRotation by animateFloatAsState(
         targetValue = if (animationStarted) 180f else 0f,
         animationSpec = tween(durationMillis = 500)
@@ -188,7 +191,7 @@ fun CurrencyInputs(
             currency = source,
             onClick = {}
         )
-        Spacer(modifier = Modifier.height(14.dp))
+        Spacer(modifier = Modifier.height(height = 14.dp))
         IconButton(
             modifier = Modifier.padding(top = 24.dp)
                 .graphicsLayer {
@@ -200,12 +203,12 @@ fun CurrencyInputs(
             }
         ) {
             Icon(
-                painter = painterResource(Res.drawable.switch_ic),
+                painter = painterResource(resource = Res.drawable.switch_ic),
                 contentDescription = "Switch Icon",
                 tint = Color.White
             )
         }
-        Spacer(modifier = Modifier.height(14.dp))
+        Spacer(modifier = Modifier.height(height = 14.dp))
         CurrencyView(
             placeholder = "from",
             currency = target,
