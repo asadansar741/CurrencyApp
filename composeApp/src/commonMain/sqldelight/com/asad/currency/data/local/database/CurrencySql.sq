@@ -10,4 +10,4 @@ getAllCurrencies:
 SELECT * FROM Currency;
 
 delete:
-DELETE FROM Currency WHERE id=?;
+DELETE FROM Currency; -- WHERE id=?;
