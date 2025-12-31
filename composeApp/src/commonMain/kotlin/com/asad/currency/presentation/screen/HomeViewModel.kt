@@ -12,6 +12,7 @@ import com.asad.currency.domain.PreferencesRepository
 import com.asad.currency.domain.model.Currency
 import com.asad.currency.domain.model.RateStatus
 import com.asad.currency.domain.model.RequestState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlin.time.Clock
@@ -20,7 +21,7 @@ import kotlin.time.ExperimentalTime
 
 sealed class HomeUiEvent {
     data object RefreshRates : HomeUiEvent()
-    data object Switch : HomeUiEvent()
+    data object SwitchCurrencies : HomeUiEvent()
 }
 
 class HomeViewModel(
@@ -31,20 +32,23 @@ class HomeViewModel(
     private var _rateStatus: MutableState<RateStatus> = mutableStateOf(RateStatus.Idle)
     val rateStatus: State<RateStatus> = _rateStatus
 
-    private var _sourceCurrency: MutableState<RequestState<Currency>> = mutableStateOf(RequestState.Idle)
+    private var _sourceCurrency: MutableState<RequestState<Currency>> =
+        mutableStateOf(RequestState.Idle)
     val sourceCurrency: State<RequestState<Currency>> = _sourceCurrency
 
-    private var _targetCurrency: MutableState<RequestState<Currency>> = mutableStateOf(RequestState.Idle)
+    private var _targetCurrency: MutableState<RequestState<Currency>> =
+        mutableStateOf(RequestState.Idle)
     val targetCurrency: State<RequestState<Currency>> = _targetCurrency
 
     private var _allCurrencies = mutableStateListOf<Currency>()
     val allCurrencies: List<Currency> = _allCurrencies
 
 
-
     init {
         screenModelScope.launch {
             fetchNewRates()
+            readSourceCurrency()
+            readTargetCurrency()
         }
     }
 
@@ -105,10 +109,43 @@ class HomeViewModel(
         else RateStatus.Stale
     }
 
+    private fun readSourceCurrency() {
+        screenModelScope.launch(context = Dispatchers.Main) {
+            preferences.readSourceCurrencyCode().collect { currencyCode ->
+                val selectedCurrency = _allCurrencies.find { it.code == currencyCode.name }
+                if (selectedCurrency != null) {
+                    _sourceCurrency.value = RequestState.Success(data = selectedCurrency)
+                } else {
+                    _sourceCurrency.value = RequestState.Error(message = "Currency not found")
+                }
+            }
+        }
+    }
+
+    private fun readTargetCurrency() {
+        screenModelScope.launch(context = Dispatchers.Main) {
+            preferences.readTargetCurrencyCode().collect { currencyCode ->
+                val selectedCurrency = _allCurrencies.find { it.code == currencyCode.name }
+                if (selectedCurrency != null) {
+                    _targetCurrency.value = RequestState.Success(data = selectedCurrency)
+                } else {
+                    _targetCurrency.value = RequestState.Error(message = "Currency not found")
+                }
+            }
+        }
+    }
+
     fun sendEvent(event: HomeUiEvent) {
         when (event) {
             HomeUiEvent.RefreshRates -> screenModelScope.launch { fetchNewRates() }
-            HomeUiEvent.Switch -> {}
+            HomeUiEvent.SwitchCurrencies -> switchCurrency()
         }
+    }
+
+    private fun switchCurrency() {
+        val source = _sourceCurrency.value
+        val target = _targetCurrency.value
+        _sourceCurrency.value = target
+        _targetCurrency.value = source
     }
 }

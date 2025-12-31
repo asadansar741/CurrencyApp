@@ -11,7 +11,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Preview
 fun App() {
 //    val colorScheme = if (!isSystemInDarkTheme()) LightColors else DarkColors
-//    initializeKoin()
     MaterialTheme() {
         Navigator(HomeScreen())
     }

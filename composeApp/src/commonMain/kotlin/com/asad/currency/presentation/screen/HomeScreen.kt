@@ -44,7 +44,7 @@ class HomeScreen : Screen {
                 },
                 source = sourceCurrency,
                 target = targetCurrency,
-                onSwitchClick = { TODO() },
+                onSwitchClick = { viewModel.sendEvent(HomeUiEvent.SwitchCurrencies) },
                 amount = amount,
                 onAmountChange =  { amount = it}
             )
