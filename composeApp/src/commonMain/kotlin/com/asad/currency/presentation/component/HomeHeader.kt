@@ -38,6 +38,7 @@ import com.asad.currency.domain.model.CurrencyType
 import com.asad.currency.domain.model.DisplayResult
 import com.asad.currency.domain.model.RateStatus
 import com.asad.currency.domain.model.RequestState
+import com.asad.currency.getPlatform
 import com.asad.currency.presentation.screen.AmountInput
 import com.asad.currency.ui.theme.headerColor
 import com.asad.currency.ui.theme.staleColor
@@ -64,6 +65,7 @@ fun HomeHeader(
             .fillMaxWidth()
             .clip(shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp))
             .background(headerColor)
+            .padding(top = if (getPlatform().name == "Android") 0.dp else 24.dp)
             .padding(all = 24.dp)
     ) {
         Spacer(modifier = Modifier.height(height = 24.dp))
