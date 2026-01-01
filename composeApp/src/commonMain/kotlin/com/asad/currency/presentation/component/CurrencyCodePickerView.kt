@@ -73,7 +73,7 @@ fun CurrencyCodePickerView(
         )
         Spacer(modifier = Modifier.width(width = 8.dp))
         Text(
-            modifier = Modifier.alpha(alpha = animateAlpha),
+            modifier = Modifier.alpha(alpha = animateAlpha).weight(1f),
             text = code.name,
             fontWeight = FontWeight.Bold,
             color = textColor
