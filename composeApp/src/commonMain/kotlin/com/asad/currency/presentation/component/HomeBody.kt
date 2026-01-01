@@ -33,6 +33,7 @@ import com.asad.currency.domain.model.CurrencyModel
 import com.asad.currency.domain.model.RequestState
 import com.asad.currency.ui.theme.headerColor
 import com.asad.currency.util.DoubleConverter
+import com.asad.currency.util.GetBebasFontFamily
 import com.asad.currency.util.calculateExchangeRate
 import com.asad.currency.util.convert
 
@@ -61,8 +62,8 @@ fun HomeBody(
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = "${(animatedExchangeAmount * 100).toLong() / 100.0}",
-                fontSize = MaterialTheme.typography.displaySmall.fontSize,
-                fontWeight = FontWeight.Bold,
+                fontSize = 60.sp,
+                fontFamily = GetBebasFontFamily(),
                 color = if (isSystemInDarkTheme()) Color.White else Color.Black,
                 textAlign = TextAlign.Center
             )
