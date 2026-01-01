@@ -38,6 +38,7 @@ kotlin {
             implementation(libs.ktor.client.android)
             implementation(libs.sql.delight.android)
             implementation(libs.koin.android)
+            implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -84,6 +85,7 @@ kotlin {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
             implementation(libs.sql.delight.desktop)
+            implementation(libs.ktor.client.okhttp)
         }
     }
 }
