@@ -1,4 +1,4 @@
-CREATE TABLE Currency (
+CREATE TABLE CurrencyTable (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     code TEXT NOT NULL UNIQUE,
     value TEXT NOT NULL
@@ -6,10 +6,10 @@ CREATE TABLE Currency (
 
 
 upsert:
-INSERT OR REPLACE INTO Currency(code,value) VALUES(?,?);
+INSERT OR REPLACE INTO CurrencyTable(code,value) VALUES(?,?);
 
 getAllCurrencies:
-SELECT * FROM Currency;
+SELECT * FROM CurrencyTable;
 
 delete:
-DELETE FROM Currency;
+DELETE FROM CurrencyTable;
