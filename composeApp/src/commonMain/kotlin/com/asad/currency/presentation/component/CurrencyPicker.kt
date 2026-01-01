@@ -64,7 +64,7 @@ fun CurrencyPickerDialog(
             ) {
                 TextField(
                     modifier = Modifier.fillMaxWidth()
-                        .clip(RoundedCornerShape(size = 8.dp)),
+                        .clip(shape = RoundedCornerShape(size = 8.dp)),
                     value = searchQuery,
                     onValueChange = { query ->
                         searchQuery = query.uppercase()
@@ -142,7 +142,7 @@ fun CurrencyPickerDialog(
         confirmButton = {
             TextButton(onClick = { onPositiveClick(selectedCurrencyCode) }) {
                 Text(
-                    text = "Cancel",
+                    text = "Confirm",
                     color = primaryColor
                 )
             }
