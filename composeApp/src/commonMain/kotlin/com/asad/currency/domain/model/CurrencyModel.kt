@@ -4,18 +4,11 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Currency(
+data class CurrencyModel(
+    @SerialName("id")
+    val id: Long? = null,
     @SerialName("code")
     val code: String,
     @SerialName("value")
     val value: Double
-)/*{
-//    @PrimaryKey
-//    var id: ObjectId = ObjectId()
-
-    @SerialName("code")
-    var code: String = ""
-
-    @SerialName("value")
-    var value: Double = 0.0
-}*/
+)

@@ -4,7 +4,6 @@ import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import com.asad.currency.data.local.database.CurrencyDatabase
 import com.asad.currency.domain.DatabaseRepository
-import com.asad.currency.domain.model.Currency
 import com.asad.currency.domain.model.RequestState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -14,14 +13,14 @@ import kotlinx.coroutines.flow.map
 class DatabaseRepositoryImpl(
     private val database: CurrencyDatabase
 ) : DatabaseRepository {
-    override suspend fun insertCurrencyData(currency: Currency) {
+    override suspend fun insertCurrencyData(currency: CurrencyEntity) {
         database.currencySqlQueries.upsert(
             code = currency.code,
             value_ = currency.value.toString()
         )
     }
 
-    override fun readCurrencyData(): Flow<RequestState<List<Currency>>> {
+    override fun readCurrencyData(): Flow<RequestState<List<CurrencyEntity>>> {
         return database.currencySqlQueries
             .getAllCurrencies()
             .asFlow()
@@ -29,7 +28,7 @@ class DatabaseRepositoryImpl(
             .map { currencies ->
                 runCatching {
                     currencies.map {
-                        Currency(it.code, it.value_.toDouble())
+                        CurrencyEntity(id = null,it.code, it.value_.toDouble())
                     }
                 }.fold(
                     onSuccess = { RequestState.Success(data = it) },

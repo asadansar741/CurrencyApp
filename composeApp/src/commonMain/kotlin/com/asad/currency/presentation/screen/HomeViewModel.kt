@@ -9,7 +9,9 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.asad.currency.domain.CurrencyApiService
 import com.asad.currency.domain.DatabaseRepository
 import com.asad.currency.domain.PreferencesRepository
-import com.asad.currency.domain.model.Currency
+import com.asad.currency.domain.mapper.toCurrencyEntity
+import com.asad.currency.domain.mapper.toCurrencyModel
+import com.asad.currency.domain.model.CurrencyModel
 import com.asad.currency.domain.model.RateStatus
 import com.asad.currency.domain.model.RequestState
 import kotlinx.coroutines.Dispatchers
@@ -32,16 +34,16 @@ class HomeViewModel(
     private var _rateStatus: MutableState<RateStatus> = mutableStateOf(RateStatus.Idle)
     val rateStatus: State<RateStatus> = _rateStatus
 
-    private var _sourceCurrency: MutableState<RequestState<Currency>> =
+    private var _sourceCurrency: MutableState<RequestState<CurrencyModel>> =
         mutableStateOf(RequestState.Idle)
-    val sourceCurrency: State<RequestState<Currency>> = _sourceCurrency
+    val sourceCurrency: State<RequestState<CurrencyModel>> = _sourceCurrency
 
-    private var _targetCurrency: MutableState<RequestState<Currency>> =
+    private var _targetCurrency: MutableState<RequestState<CurrencyModel>> =
         mutableStateOf(RequestState.Idle)
-    val targetCurrency: State<RequestState<Currency>> = _targetCurrency
+    val targetCurrency: State<RequestState<CurrencyModel>> = _targetCurrency
 
-    private var _allCurrencies = mutableStateListOf<Currency>()
-    val allCurrencies: List<Currency> = _allCurrencies
+    private var _allCurrencies = mutableStateListOf<CurrencyModel>()
+    val allCurrencies: List<CurrencyModel> = _allCurrencies
 
 
     init {
@@ -60,7 +62,11 @@ class HomeViewModel(
                 if (localCache.getSuccessData().isNotEmpty()) {
                     println("Tag: Database is full")
                     _allCurrencies.clear()
-                    _allCurrencies.addAll(elements = localCache.getSuccessData())
+                    _allCurrencies.addAll(
+                        elements = localCache.getSuccessData().map { currencyEntity->
+                            currencyEntity.toCurrencyModel()
+                        }
+                    )
                     if (!preferences.isDataFresh(
                             currentTimeStamp = Clock.System.now().toEpochMilliseconds()
                         )
@@ -77,7 +83,6 @@ class HomeViewModel(
             } else if (localCache.isError()) {
                 println("HomeViewModel: ERROR READING LOCAL DATABASE ${localCache.getErrorMessage()}")
             }
-
             getRateStatus()
         } catch (e: Exception) {
             println(e.message)
@@ -90,7 +95,7 @@ class HomeViewModel(
             dbRepository.delete()
             fetchedData.getSuccessData().forEach {
                 println("HomeViewModel: ADDING ${it.code}")
-                dbRepository.insertCurrencyData(currency = it)
+                dbRepository.insertCurrencyData(currency = it.toCurrencyEntity())
             }
             println("HomeViewModel: UPDATING _allCurrencies")
             _allCurrencies.clear()

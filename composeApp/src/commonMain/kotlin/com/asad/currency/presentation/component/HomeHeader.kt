@@ -1,4 +1,4 @@
-package com.asad.currency.presentation.screen
+package com.asad.currency.presentation.component
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -32,11 +32,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.asad.currency.domain.model.Currency
 import com.asad.currency.domain.model.CurrencyCode
+import com.asad.currency.domain.model.CurrencyModel
 import com.asad.currency.domain.model.DisplayResult
 import com.asad.currency.domain.model.RateStatus
 import com.asad.currency.domain.model.RequestState
+import com.asad.currency.presentation.screen.AmountInput
 import com.asad.currency.ui.theme.headerColor
 import com.asad.currency.ui.theme.staleColor
 import com.asad.currency.util.displayCurrentDateTime
@@ -49,8 +50,8 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun HomeHeader(
     status: RateStatus,
-    source: RequestState<Currency>,
-    target: RequestState<Currency>,
+    source: RequestState<CurrencyModel>,
+    target: RequestState<CurrencyModel>,
     amount: Double,
     onAmountChange: (Double) -> Unit,
     onSwitchClick: () -> Unit,
@@ -125,7 +126,7 @@ fun RatesStatus(
 @Composable
 fun RowScope.CurrencyView(
     placeholder: String,
-    currency: RequestState<Currency>,
+    currency: RequestState<CurrencyModel>,
     onClick: () -> Unit
 ) {
     Column(
@@ -172,8 +173,8 @@ fun RowScope.CurrencyView(
 
 @Composable
 fun CurrencyInputs(
-    source: RequestState<Currency>,
-    target: RequestState<Currency>,
+    source: RequestState<CurrencyModel>,
+    target: RequestState<CurrencyModel>,
     onSwitchClick: () -> Unit
 ) {
     var animationStarted by remember { mutableStateOf(value = false) }
