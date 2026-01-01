@@ -8,8 +8,7 @@ fun initKoin(config: KoinAppDeclaration? = null) {
         config?.invoke(this)
         modules(
             sharedModule,
-            platformModule,
-            getCoreDatabaseModule()
+            platformModule
         )
     }
 }
