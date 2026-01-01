@@ -65,6 +65,7 @@ class HomeViewModel(
                 if (localCache.getSuccessData().isNotEmpty()) {
                     println("Tag: Database is full")
                     _allCurrencies.clear()
+                    _allCurrencies.clear()
                     _allCurrencies.addAll(
                         elements = localCache.getSuccessData().map { currencyEntity ->
                             currencyEntity.toCurrencyModel()
