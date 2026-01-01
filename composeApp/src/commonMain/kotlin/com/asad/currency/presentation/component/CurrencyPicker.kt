@@ -38,7 +38,7 @@ import com.asad.currency.ui.theme.textColor
 fun CurrencyPickerDialog(
     currencies: List<CurrencyModel>,
     currencyType: CurrencyType,
-    onPositiveClick: (CurrencyCode) -> Unit,
+    onConfirmClick: (CurrencyCode) -> Unit,
     onDismiss: () -> Unit
 ) {
     val allCurrencies = remember {
@@ -115,7 +115,7 @@ fun CurrencyPickerDialog(
                         ) {
                             items(
                                 items = availableCurrencies,
-                                key = { it.id?.toHexString() ?: 0 }
+                                key = { it.code.hashCode() }
                             ) { currency ->
                                 CurrencyCodePickerView(
                                     code = CurrencyCode.valueOf(currency.code),
@@ -140,7 +140,7 @@ fun CurrencyPickerDialog(
             }
         },
         confirmButton = {
-            TextButton(onClick = { onPositiveClick(selectedCurrencyCode) }) {
+            TextButton(onClick = { onConfirmClick(selectedCurrencyCode) }) {
                 Text(
                     text = "Confirm",
                     color = primaryColor

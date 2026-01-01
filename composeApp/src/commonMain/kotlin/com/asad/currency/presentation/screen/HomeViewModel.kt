@@ -15,6 +15,7 @@ import com.asad.currency.domain.model.CurrencyModel
 import com.asad.currency.domain.model.RateStatus
 import com.asad.currency.domain.model.RequestState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlin.time.Clock
@@ -24,6 +25,8 @@ import kotlin.time.ExperimentalTime
 sealed class HomeUiEvent {
     data object RefreshRates : HomeUiEvent()
     data object SwitchCurrencies : HomeUiEvent()
+    data class SaveSourceCurrencyCode(val code: String) : HomeUiEvent()
+    data class SaveTargetCurrencyCode(val code: String) : HomeUiEvent()
 }
 
 class HomeViewModel(
@@ -63,7 +66,7 @@ class HomeViewModel(
                     println("Tag: Database is full")
                     _allCurrencies.clear()
                     _allCurrencies.addAll(
-                        elements = localCache.getSuccessData().map { currencyEntity->
+                        elements = localCache.getSuccessData().map { currencyEntity ->
                             currencyEntity.toCurrencyModel()
                         }
                     )
@@ -142,8 +145,14 @@ class HomeViewModel(
 
     fun sendEvent(event: HomeUiEvent) {
         when (event) {
-            HomeUiEvent.RefreshRates -> screenModelScope.launch { fetchNewRates() }
-            HomeUiEvent.SwitchCurrencies -> switchCurrency()
+            is HomeUiEvent.RefreshRates -> screenModelScope.launch { fetchNewRates() }
+            is HomeUiEvent.SwitchCurrencies -> switchCurrency()
+            is HomeUiEvent.SaveSourceCurrencyCode -> {
+                saveSourceCurrencyCode(code = event.code)
+            }
+            is HomeUiEvent.SaveTargetCurrencyCode -> {
+                saveTargetCurrencyCode(code = event.code)
+            }
         }
     }
 
@@ -152,5 +161,21 @@ class HomeViewModel(
         val target = _targetCurrency.value
         _sourceCurrency.value = target
         _targetCurrency.value = source
+    }
+
+    private fun saveSourceCurrencyCode(code: String) {
+        screenModelScope.launch(Dispatchers.IO) {
+            preferences.saveSourceCurrencyCode(code)
+        }
+    }
+
+    private fun saveTargetCurrencyCode(code: String) {
+        screenModelScope.launch(Dispatchers.IO) {
+            preferences.saveTargetCurrencyCode(code)
+        }
+    }
+
+    companion object {
+        private const val TAG = "HomeViewModel"
     }
 }

@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.asad.currency.domain.model.CurrencyCode
 import com.asad.currency.domain.model.CurrencyModel
+import com.asad.currency.domain.model.CurrencyType
 import com.asad.currency.domain.model.DisplayResult
 import com.asad.currency.domain.model.RateStatus
 import com.asad.currency.domain.model.RequestState
@@ -55,7 +56,8 @@ fun HomeHeader(
     amount: Double,
     onAmountChange: (Double) -> Unit,
     onSwitchClick: () -> Unit,
-    onRateRefresh: () -> Unit
+    onRateRefresh: () -> Unit,
+    onCurrencyTypeSelect: (CurrencyType) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -73,7 +75,8 @@ fun HomeHeader(
         CurrencyInputs(
             source = source,
             target = target,
-            onSwitchClick = onSwitchClick
+            onSwitchClick = onSwitchClick,
+            onCurrencyTypeSelect = onCurrencyTypeSelect
         )
         Spacer(modifier = Modifier.height(height = 24.dp))
         AmountInput(
@@ -175,7 +178,8 @@ fun RowScope.CurrencyView(
 fun CurrencyInputs(
     source: RequestState<CurrencyModel>,
     target: RequestState<CurrencyModel>,
-    onSwitchClick: () -> Unit
+    onSwitchClick: () -> Unit,
+    onCurrencyTypeSelect: (CurrencyType) -> Unit
 ) {
     var animationStarted by remember { mutableStateOf(value = false) }
     val animatedRotation by animateFloatAsState(
@@ -190,7 +194,17 @@ fun CurrencyInputs(
         CurrencyView(
             placeholder = "from",
             currency = source,
-            onClick = {}
+            onClick = {
+                if (source.isSuccess()) {
+                    onCurrencyTypeSelect(
+                        CurrencyType.Source(
+                            currencyCode = CurrencyCode.valueOf(
+                                value = source.getSuccessData().code
+                            )
+                        )
+                    )
+                }
+            }
         )
         Spacer(modifier = Modifier.height(height = 14.dp))
         IconButton(
@@ -213,7 +227,17 @@ fun CurrencyInputs(
         CurrencyView(
             placeholder = "from",
             currency = target,
-            onClick = {}
+            onClick = {
+                if (target.isSuccess()) {
+                    onCurrencyTypeSelect(
+                        CurrencyType.Target(
+                            currencyCode = CurrencyCode.valueOf(
+                                value = target.getSuccessData().code
+                            )
+                        )
+                    )
+                }
+            }
         )
     }
 }

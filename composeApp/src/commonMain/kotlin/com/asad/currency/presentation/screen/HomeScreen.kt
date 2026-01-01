@@ -41,15 +41,32 @@ class HomeScreen : Screen {
         var selectedCurrencyType: CurrencyType by remember {
             mutableStateOf(CurrencyType.None)
         }
-        var dialogOpened by remember { mutableStateOf(value = true) }
-        if (dialogOpened) {
+        var dialogOpened by remember { mutableStateOf(value = false) }
+        if (dialogOpened && selectedCurrencyType != CurrencyType.None) {
             CurrencyPickerDialog(
                 currencies = allCurrencies,
                 currencyType = selectedCurrencyType,
-                onPositiveClick = {
+                onConfirmClick = { currencyCode ->
+                    if (selectedCurrencyType is CurrencyType.Source) {
+                        viewModel.sendEvent(
+                            HomeUiEvent.SaveSourceCurrencyCode(
+                                code = currencyCode.name
+                            )
+                        )
+                    } else if (selectedCurrencyType is CurrencyType.Target) {
+                        viewModel.sendEvent(
+                            HomeUiEvent.SaveTargetCurrencyCode(
+                                code = currencyCode.name
+                            )
+                        )
+                    }
+                    selectedCurrencyType = CurrencyType.None
                     dialogOpened = false
                 },
-                onDismiss = { dialogOpened = false }
+                onDismiss = {
+                    selectedCurrencyType = CurrencyType.None
+                    dialogOpened = false
+                }
             )
         }
 
@@ -65,7 +82,11 @@ class HomeScreen : Screen {
                 target = targetCurrency,
                 onSwitchClick = { viewModel.sendEvent(HomeUiEvent.SwitchCurrencies) },
                 amount = amount,
-                onAmountChange = { amount = it }
+                onAmountChange = { amount = it },
+                onCurrencyTypeSelect = { currencyType ->
+                    selectedCurrencyType = currencyType
+                    dialogOpened = true
+                }
             )
         }
     }
