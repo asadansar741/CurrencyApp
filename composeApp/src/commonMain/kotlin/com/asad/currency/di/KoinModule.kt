@@ -12,31 +12,6 @@ import com.russhwolf.settings.Settings
 import org.koin.dsl.module
 import org.koin.core.module.Module
 
-/*val appModule = module {
-    single<Settings> { Settings() }
-    single<PreferencesRepository> { PreferencesImpl(settings = get()) }
-    single<CurrencyApiService> { CurrencyApiServiceImpl(preferences = get()) }
-    single<DatabaseRepository> { DatabaseRepositoryImpl(database = get()) }
-
-    factory {
-        HomeViewModel(
-            preferences = get(),
-            api = get(),
-            dbRepository = get()
-        )
-    }
-}
-
-val databaseModule = module {
-    single<CurrencyDatabase> {
-        CurrencyDatabase(
-            driver = get()
-        )
-    }
-}*/
-
-///////////////////////////////
-
 expect val platformModule: Module
 
 val sharedModule = module {

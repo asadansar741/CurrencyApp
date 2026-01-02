@@ -98,7 +98,6 @@ private fun CurrencyCodeSelector(isSelected: Boolean = false) {
         if (isSelected) {
             Icon(
                 modifier = Modifier.size(12.dp),
-//                imageVector = Icons.Default.Check,
                 contentDescription = "Checkmark icon",
                 tint = surfaceColor,
                 painter = painterResource(resource = Res.drawable.check)
