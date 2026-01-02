@@ -227,7 +227,7 @@ fun CurrencyInputs(
         }
         Spacer(modifier = Modifier.height(height = 14.dp))
         CurrencyView(
-            placeholder = "from",
+            placeholder = "to",
             currency = target,
             onClick = {
                 if (target.isSuccess()) {

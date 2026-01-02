@@ -107,7 +107,7 @@ fun AmountInput(
         modifier = Modifier.fillMaxWidth()
             .clip(RoundedCornerShape(size = 8.dp))
             .animateContentSize()
-            .height(54.dp),
+            .height(height = 60.dp),
         value = "$amount",
         onValueChange = {
             onAmountChange(it.toDouble())

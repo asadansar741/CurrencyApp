@@ -25,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -64,7 +63,7 @@ fun HomeBody(
                 text = "${(animatedExchangeAmount * 100).toLong() / 100.0}",
                 fontSize = 60.sp,
                 fontFamily = GetBebasFontFamily(),
-                color = if (isSystemInDarkTheme()) Color.White else Color.Black,
+                color = Color.Black,
                 textAlign = TextAlign.Center
             )
             AnimatedVisibility(visible = source.isSuccess() && target.isSuccess()) {
@@ -75,8 +74,7 @@ fun HomeBody(
                                 "${(target.getSuccessData().value) / (source.getSuccessData().value)} " +
                                 target.getSuccessData().code,
                         fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                        color = if (isSystemInDarkTheme()) Color.White.copy(alpha = 0.5f)
-                        else Color.Black.copy(alpha = 0.5f),
+                        color =Color.Black.copy(alpha = 0.9f),
                         textAlign = TextAlign.Center,
                         lineHeight = 20.sp
                     )
@@ -86,8 +84,7 @@ fun HomeBody(
                                 "${(source.getSuccessData().value) / (target.getSuccessData().value)} " +
                                 source.getSuccessData().code,
                         fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                        color = if (isSystemInDarkTheme()) Color.White.copy(alpha = 0.5f)
-                        else Color.Black.copy(alpha = 0.5f),
+                        color = Color.Black.copy(alpha = 0.9f),
                         textAlign = TextAlign.Center,
                         lineHeight = 20.sp
                     )
